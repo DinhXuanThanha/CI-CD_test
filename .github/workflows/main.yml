@@ -1,0 +1,41 @@
+name: CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - main  # Chạy workflow khi có push lên nhánh main
+  pull_request:
+    branches:
+      - main  # Chạy workflow khi có pull request đến nhánh main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Thiết lập môi trường
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Cài đặt Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18' # Phiên bản Node.js
+
+    # Cài đặt các dependencies
+    - name: Install dependencies
+      run: npm install
+
+    # Chạy kiểm tra
+    - name: Run tests
+      run: npm test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Deploy to server
+      run: |
+        echo "Triển khai ứng dụng tại đây."
+        # Bạn có thể thêm các bước deploy tùy thuộc vào môi trường của bạn.
